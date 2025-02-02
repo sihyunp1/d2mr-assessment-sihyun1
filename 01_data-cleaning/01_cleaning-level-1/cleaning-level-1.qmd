@@ -301,7 +301,7 @@ print(clean.mtcars)
 
 ```{r}
 
-#| label: change attributes
+#| label: change-attributes
 
 attributes(clean.mtcars)
 attributes(goal.mtcars)
@@ -361,7 +361,7 @@ You can call it a day here, or continue with the optional cleaning tasks below. 
 
 1. Create a new factor column `mpg_category` that categorizes `mpg` into "low", "medium", and "high" based on the distribution of `mpg` values.
 ```{r}
-#| label: new factor column 'mpg_category' 
+#| label: new-factor-column-'mpg_category' 
 
 # Create a new factor column "mpg_category" based on mpg distribution
 clean.mtcars <- clean.mtcars %>%
@@ -378,7 +378,7 @@ print(clean.mtcars)
 ```
 2. Create a new factor column `wt_category` that categorizes `wt` into "light", "medium", and "heavy" based on the distribution of `wt` values, then reverse the order of the levels.
 ```{r}
-#| label: new factor column 'wt_category' 
+#| label: new-factor-column-'wt_category' 
 
 clean.mtcars <- clean.mtcars %>%
   mutate(wt_category = case_when(
@@ -402,7 +402,7 @@ print(levels(factor(clean.mtcars$wt_category)))
 
 3. Create a new column `mpg_per_cyl` that calculates `mpg` divided by `cyl`.
 ```{r}
-#| label: new column 'mpg-per-cyl'
+#| label: new-column-'mpg-per-cyl'
 
 # Create the new column
 clean.mtcars <- clean.mtcars %>%
@@ -415,7 +415,7 @@ print(clean.mtcars)
 
 4. Filter the data to only include cars with automatic transmissions. (Hint: `?mtcars` will show you useful info.)
 ```{r}
-#| label: filter data
+#| label: filter-data
 
 #check useful info 
 ?mtcars
@@ -433,7 +433,7 @@ head(auto.cars)
 
 5. Identify which variable would be better suited as a logical variable, then convert it to logical.
 ```{r}
-#| label: convert logical variable
+#| label: convert-logical-variable
 
 #check useful info 
 ?mtcars
@@ -451,7 +451,7 @@ str(clean.mtcars$vs)
 
 6. Sort the dataset by `mpg_category` then reverse alphabetically by `model` (so that models with the same `mpg_category` are sorted Z to A).
 ```{r}
-#| label: sort by 'mpg_category'
+#| label: sort-by-'mpg_category'
 
 # Sort by 'mpg_category', then reverse alphabetically by model
 clean.mtcars <- clean.mtcars %>%
@@ -467,7 +467,7 @@ print(clean.mtcars)
 
 7. Write the cleaned dataset as a csv file called `clean-mtcars.csv`, then read the csv back in maintaining the correct data types.
 ```{r}
-#| label: write and read csv
+#| label: write-and-read-back-csv
 
 # Write cleaned dataset to CSV
 write_csv(clean.mtcars, "clean-mtcars.csv")
