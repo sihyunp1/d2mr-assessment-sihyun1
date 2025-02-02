@@ -98,10 +98,22 @@ QUESTIONS:
 1. What are the differences between the messy dataset and the original mtcars dataset?
 
 <!-- answer below -->
+- Columns are out of order
+- Column names don't match
+- White space in the ' Car Model' column in the messy dataset
+- Data types are incorrect 
+- Numbers aren't rounded to the same number of decimal places
+- Two extra columns in the messy dataset
+
 
 2. What are the main issues you need to address in cleaning?
 
 <!-- answer below -->
+- Rename columns
+- Reorder columns
+- Change data types: columns to numeric
+- Round numbers to the same number of decimal places 
+- Remove two extra columns
 
 
 
@@ -114,7 +126,7 @@ QUESTIONS:
 #| label: make-cleaning-dataset
 
 # Create a dataset to work with during the cleaning process called "clean.mtcars"
-
+clean.mtcars <- messy.mtcars
 
 ```
 
@@ -126,8 +138,13 @@ QUESTIONS:
 
 #| label: rename-columns
 
-# Rename columns to match the original mtcars dataset
+# Rename columns to match the goal.mtcars dataset with rename()
 
+clean.mtcars <- messy.mtcars %>%
+    # The format is rename(new_name = old_name)
+  rename(model = ' Car Model', mpg = 'mpg (Miles/Gallon)', cyl = cylinders, disp = dsip, hp = horsepower, drat = drat, wt = wt, qsec = qsec, vs = vs, am = am, gear = gearbox, carb = carburetors)
+
+colnames(clean.mtcars)
 
 ```
 
@@ -135,8 +152,11 @@ QUESTIONS:
 
 #| label: reorder-columns
 
-# Reorder columns to match the original mtcars dataset
+# Reorder columns to match the goal.mtcars dataset
+clean.mtcars <- clean.mtcars %>%
+  relocate(model, mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb)
 
+colnames(clean.mtcars)
 
 ```
 
@@ -144,7 +164,21 @@ QUESTIONS:
 
 #| label: correct-data-types
 
-# Correct variable data types
+# convert to numeric 
+clean.mtcars <- clean.mtcars %>% 
+ mutate(
+        mpg = as.numeric(mpg),
+        cyl = as.numeric(cyl),
+        disp = as.numeric(disp),
+        hp = as.numeric(hp),
+        drat = as.numeric(drat),
+        wt = as.numeric(wt),
+        qsec = as.numeric(qsec),
+        vs = as.numeric(vs),
+        am = as.numeric(am),
+        gear = as.numeric(gear),
+        carb = as.numeric(carb)
+    ) 
 
 ```
 
@@ -158,6 +192,7 @@ QUESTIONS:
 
 # Use all.equal() to check if clean.mtcars matches goal.mtcars
 
+all.equal(clean.mtcars, goal.mtcars)
 ```
 
 Questions:
@@ -165,6 +200,11 @@ Questions:
 3. The current state of the dataset does not yet match the `goal.mtcars` dataset. Explain the issues that `all.equal()` flags.  Are there groups of issues that can be addressed together?
 
 <!-- answer below -->
+- Attribute mismatch: overall class of the dataset differs
+- Two extra columns in clean.mtcars
+- Typos and inconsistet capitalization in the 'model' columns
+- cly and hp have missing values that are not yet handled in the clean.mtcars dataset
+- Rounding inconsistencies
 
 3. Install (if necessary) and load the `daff` package. In the code chunk below, use the `diff_data()` function to identify the differences between `clean.mtcars` and `goal.mtcars`. 
 
@@ -173,16 +213,17 @@ Questions:
 
 # Install and/or load the daff package if needed
 # install.package("daff")
-# library(daff)
+library(daff)
 
 # Use render_diff() and diff_data() to identify differences between clean.mtcars and goal.mtcars
-
+render_diff(diff_data(clean.mtcars, goal.mtcars))
 
 ```
 
 How is this method of identifying data discrepancies different from `all.equal()`? Which do you find more helpful at this point?
 
 <!-- answer below -->
+`diff_data()` tells us that there are differences between the two datasets. Since right now the two datasets are still very different, it tells us that there are differences basically in every row, which is not helpful in this case because I know it is very different. It is more helpful to use 'all.equal()' to clearly show me what kind of issues/discrepancies should be fixed.  
 
 ## Clean data values
 
@@ -194,6 +235,11 @@ Identifying specific value problems and cleaning them might take a little creati
 
 # Remove unwanted whitespace in any columns required
 
+clean.mtcars <- clean.mtcars %>%
+    mutate(
+        # Trim whitespace from the beginning and end of the string
+        model = str_squish(model)
+    )
 
 ```
 
@@ -202,7 +248,15 @@ Identifying specific value problems and cleaning them might take a little creati
 #| label: impute-missing-values
 
 # Impute missing values for cyl and hp
-
+clean.mtcars <- clean.mtcars %>%
+  mutate(
+    # Replace NA in `cyl` and 'hp' column with specific values
+    cyl = ifelse(is.na(cyl) & model == 'CAdillac Fleetwood', 8, cyl), 
+    cyl = ifelse(is.na(cyl) & model == 'FerrAri Dino', 6, cyl),   
+    hp = ifelse(is.na(hp) & model == 'Merc 230', 95, hp),   
+    hp = ifelse(is.na(hp) & model == 'Fiat 128', 66, hp),
+    hp = ifelse(is.na(hp) & model == 'Porsche 914-2', 91, hp), 
+  )
 ```
 
 ```{r}
@@ -210,7 +264,16 @@ Identifying specific value problems and cleaning them might take a little creati
 #| label: round-numeric-values
 
 # Round numeric values
+clean.mtcars<- clean.mtcars %>% 
+  # Round to the specific decimal places
+    mutate(
+        disp = round(disp, 1),
+        drat = round(drat, 2),
+        qsec = round(qsec, 2)
+    )
 
+all.equal(clean.mtcars, goal.mtcars)
+render_diff(diff_data(clean.mtcars, goal.mtcars))
 ```
 
 ```{r}
@@ -220,7 +283,32 @@ Identifying specific value problems and cleaning them might take a little creati
 # Fix typos in model names
 ## Hint: This can be completed with a 6-line mutate() statement
 
+clean.mtcars <- clean.mtcars %>%
+    mutate(model = str_replace_all(model, c(
+        "SportAbout" = "Sportabout",
+        "CAdillac" = "Cadillac",
+        "ToyotA|T0yota" = "Toyota",  # Merged two replacements into one
+        "PontiAc" = "Pontiac",
+        "L0tus" = "Lotus",
+        "FerrAri" = "Ferrari"
+    )))
 
+all.equal(clean.mtcars, goal.mtcars)
+colnames(clean.mtcars)
+print(clean.mtcars)
+
+```
+
+```{r}
+
+#| label: change attributes
+
+attributes(clean.mtcars)
+attributes(goal.mtcars)
+
+# Make both datasets tibbles
+clean.mtcars <- as_tibble(clean.mtcars) 
+goal.mtcars <- as_tibble(goal.mtcars)
 
 ```
 
@@ -229,7 +317,13 @@ Identifying specific value problems and cleaning them might take a little creati
 #| label: remove-extra-column
 
 # Remove the extra column
+clean.mtcars <- clean.mtcars %>%
+  select(all_of(names(goal.mtcars)))
 
+all.equal(clean.mtcars, goal.mtcars)
+
+print(goal.mtcars)
+print(clean.mtcars)
 
 ```
 
@@ -242,8 +336,10 @@ Identifying specific value problems and cleaning them might take a little creati
 # Inspect the dataset and compare to goal.mtcars
 
 # all.equal()
+all.equal(clean.mtcars, goal.mtcars)
 
 # daff
+render_diff(diff_data(clean.mtcars, goal.mtcars))
 
 ```
 
@@ -252,7 +348,7 @@ Questions:
 5. Is your dataset identical to `goal.mtcars`? If not, what are the remaining issues? If there were any issues you could not resolve in code, describe a proposed solution in plain English.
 
 <!-- answer below -->
-
+The dataset is now identcal to 'goal.mtcars'.
 
 # Optional Cleaning Tasks
 
@@ -264,12 +360,141 @@ You can call it a day here, or continue with the optional cleaning tasks below. 
 *Optional:* Complete any number of the following tasks to further clean the dataset. Each task should be in its own code chunk with an appropriate label and clearly commented code:
 
 1. Create a new factor column `mpg_category` that categorizes `mpg` into "low", "medium", and "high" based on the distribution of `mpg` values.
+```{r}
+#| label: new factor column 'mpg_category' 
+
+# Create a new factor column "mpg_category" based on mpg distribution
+clean.mtcars <- clean.mtcars %>%
+  mutate(mpg_category = case_when(
+    mpg < quantile(mpg, 1/3) ~ "low",
+    mpg < quantile(mpg, 2/3) ~ "medium",
+    TRUE ~ "high"
+  )) %>%
+  mutate(mpg_category = factor(mpg_category, levels = c("low", "medium", "high")))
+
+# Checkpoint
+print(levels(factor(clean.mtcars$mpg_category)))
+print(clean.mtcars)
+```
 2. Create a new factor column `wt_category` that categorizes `wt` into "light", "medium", and "heavy" based on the distribution of `wt` values, then reverse the order of the levels.
+```{r}
+#| label: new factor column 'wt_category' 
+
+clean.mtcars <- clean.mtcars %>%
+  mutate(wt_category = case_when(
+    wt < quantile(wt, 1/3) ~ "light",
+    wt < quantile(wt, 2/3) ~ "medium",
+    TRUE ~ "heavy"
+  ))
+
+# Check the order before reversing it
+print(levels(factor(clean.mtcars$wt_category)))
+
+# Reverse the order of the levels
+clean.mtcars <- clean.mtcars %>%
+  mutate(wt_category = factor(wt_category, levels = c("light", "medium", "heavy"))) %>%
+  mutate(wt_category = fct_rev(wt_category))
+
+# Checkpoint
+print(levels(factor(clean.mtcars$wt_category)))
+
+```
+
 3. Create a new column `mpg_per_cyl` that calculates `mpg` divided by `cyl`.
+```{r}
+#| label: new column 'mpg-per-cyl'
+
+# Create the new column
+clean.mtcars <- clean.mtcars %>%
+  mutate(mpg_per_cyl = mpg / cyl)
+
+# Checkpoint
+print(clean.mtcars)
+
+```
+
 4. Filter the data to only include cars with automatic transmissions. (Hint: `?mtcars` will show you useful info.)
+```{r}
+#| label: filter data
+
+#check useful info 
+?mtcars
+
+# Filter data for cars with automatic transmissions
+auto.cars <- clean.mtcars %>%
+  filter(am == 0)
+
+# Checkpoint
+head(auto.cars)
+
+```
+
+
+
 5. Identify which variable would be better suited as a logical variable, then convert it to logical.
+```{r}
+#| label: convert logical variable
+
+#check useful info 
+?mtcars
+
+# Convert 'vs' to logical because it represents engine shape (0 and 1 values), which makes it a good candidate to convert to a logical variable (TRUE/FALSE)
+clean.mtcars <- clean.mtcars %>%
+  mutate(vs = as.logical(vs))
+
+# Checkpoint
+str(clean.mtcars$vs)
+
+```
+
+
+
 6. Sort the dataset by `mpg_category` then reverse alphabetically by `model` (so that models with the same `mpg_category` are sorted Z to A).
+```{r}
+#| label: sort by 'mpg_category'
+
+# Sort by 'mpg_category', then reverse alphabetically by model
+clean.mtcars <- clean.mtcars %>%
+  arrange(mpg_category, desc(model))
+
+# Checkpoint
+head(clean.mtcars)
+print(clean.mtcars)
+
+```
+
+
+
 7. Write the cleaned dataset as a csv file called `clean-mtcars.csv`, then read the csv back in maintaining the correct data types.
+```{r}
+#| label: write and read csv
+
+# Write cleaned dataset to CSV
+write_csv(clean.mtcars, "clean-mtcars.csv")
+
+# Read back the dataset
+clean.mtcars_read <- read_csv("clean-mtcars.csv", col_types = cols(
+  mpg = col_double(),
+  cyl = col_double(),
+  disp = col_double(),
+  hp = col_double(),
+  drat = col_double(),
+  wt = col_double(),
+  qsec = col_double(),
+  vs = col_logical(),
+  am = col_double(),
+  gear = col_double(),
+  carb = col_double(),
+  mpg_category = col_factor(levels = c("low", "medium", "high")),
+  wt_category = col_factor(levels = c("light", "medium", "heavy"))
+))
+
+# Confirm correct types
+str(clean.mtcars_read)
+
+```
+
+
 
 
 ## Unguided cleaning and transformation
