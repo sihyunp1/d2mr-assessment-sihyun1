@@ -19,9 +19,9 @@ Section: 1
 
 Mini-project title:cleaning level 1
 
-Submission date: 1/28/2025
+Submission date: 2/2/2025
 
-Project GitHub subdirectory URL: https://github.com/sihyunp1/d2mr-assessment-sihyun1.git
+Project GitHub subdirectory URL: https://github.com/sihyunp1/d2mr-assessment-sihyun1/tree/main/01_data-cleaning/01_cleaning-level-1
 
 URL or instructions to access additional materials, if needed:
 
