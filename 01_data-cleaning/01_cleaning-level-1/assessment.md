@@ -17,7 +17,7 @@ CNetID: sihyun1
 
 Section: 1
 
-Mini-project title:cleaning level 1
+Mini-project title:"Level 1 Data Cleaning: Clean the mtcars Dataset"
 
 Submission date: 2/2/2025
 
