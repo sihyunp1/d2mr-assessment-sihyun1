@@ -97,7 +97,7 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
+        -   [X] Objective met
         -   Grader comments:
 
 6.  Use arithmetic, comparison, and logical operators
@@ -107,7 +107,7 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
+        -   [X] Objective met
         -   Grader comments:
 
 7.  Parse and define functions and arguments
@@ -128,7 +128,7 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
+        -   [X] Objective met
         -   Grader comments:
 
 ### Tidyverse
@@ -140,8 +140,8 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
-        -   Grader comments:
+        -   [X] Objective met
+        -   Grader comments: Good to see you've tried specific parameters when reading the data like `trim_ws = FALSE`.
 
 10. Use `dplyr` and `tidyr` functions to transform data
 
@@ -151,8 +151,8 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
-        -   Grader comments:
+        -   [X] Objective met
+        -   Grader comments: I might have missed it, but it seems that no `tidyr` function is used in the script. This one is still marked as met, but make sure you know what functions `tidyr` includes.
 
 11. Use `stringr` functions to work with string variables
 
@@ -161,7 +161,7 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
+        -   [X] Objective met
         -   Grader comments:
 
 12. Use `forcats` functions to work with factor variables
@@ -171,7 +171,7 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
+        -   [X] Objective met
         -   Grader comments:
 
 ### Data visualization with ggplot2
@@ -290,7 +290,7 @@ Below each learning objective is a list of general expectations for meeting that
 
         -   [ ] Objective attempt
         -   [X] Unique objective attempt
-        -   [ ] Objective met
+        -   [X] Objective met
         -   Grader comments: 
         
 23. Use code chunks to set up a quarto document
@@ -479,13 +479,13 @@ The most rewarding part was seeing all the transformations come together to crea
 
 ## Grader feedback
 
--   Grader:
--   Date:
--   Points toward unique objectives (up to 20):
--   Additional points (up to 20):
--   TA provisional engagement points (up to 10):
+-   Grader: Mian
+-   Date: Feb 9, 2025
+-   Points toward unique objectives (up to 20): 8 (NO. 5, 6, 8, 9, 10, 11, 12, 22 in MP1) 
+-   Additional points (up to 20): 8 (unassessed 1, 2, 3, 4, 5, 9, 12, 13 in MP1)
+-   TA provisional engagement points (up to 10): 5
 -   Final approved engagement points (up to 10):
--   Total points (up to 50):
+-   Total points (up to 50): 21 (tentative)
 
 Engagement points are awarded for going above and beyond the expectations of the project and are not guaranteed on any given submission.. Demonstrating the assessed learning objectives earns you points in those categories, but engagement points are awarded for exceptional effort, creativity, or skill.
 
@@ -493,4 +493,4 @@ TAs may recommend engagement points provisionally, but the instructor will make 
 
 Additional comments: 
 
-
+By Mian: God job! I appreciate your discussions and reflections. They show a meaningful engagement with the project. Keep up with the good work.
